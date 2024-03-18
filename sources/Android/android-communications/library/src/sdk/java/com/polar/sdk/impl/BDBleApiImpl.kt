@@ -449,15 +449,22 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
 
     @Throws(PolarInvalidArgument::class)
     override fun connectToDevice(identifier: String) {
+        log("connectToDevice: ${identifier}")
         val session = fetchSession(identifier)
+
+        log("connectToDevice: ${session}")
+
         if (session == null || session.sessionState == DeviceSessionState.SESSION_CLOSED) {
+            log("session null or session state is closed")
             if (connectSubscriptions.containsKey(identifier)) {
                 connectSubscriptions[identifier]?.dispose()
                 connectSubscriptions.remove(identifier)
             }
             if (session != null) {
+                log("open session connection")
                 openConnection(session)
             } else {
+                log("listener search...")
                 listener?.let {
                     connectSubscriptions[identifier] = it.search(false)
                         .filter { bleDeviceSession: BleDeviceSession -> if (identifier.contains(":")) bleDeviceSession.address == identifier else bleDeviceSession.polarDeviceId == identifier }
@@ -469,6 +476,9 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
                             { log("connect search completed for $identifier") })
                 }
             }
+        }
+        else {
+            log("session state not closed")
         }
     }
 
@@ -947,6 +957,7 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
     }
 
     private fun openConnection(session: BleDeviceSession) {
+        log("openConnection: ${session}")
         listener?.let {
             if (devicesStateMonitorDisposable == null || devicesStateMonitorDisposable?.isDisposed == true) {
                 devicesStateMonitorDisposable = it.monitorDeviceSessionState().subscribe(deviceStateMonitorObserver)
