@@ -1733,10 +1733,12 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
     }
 
     private fun log(message: String) {
+        BleLogger.e(TAG, "" + message)
         logger?.message("" + message)
     }
 
     private fun logError(message: String) {
+        BleLogger.e(TAG, "Error: $message")
         logger?.message("Error: $message")
     }
 
