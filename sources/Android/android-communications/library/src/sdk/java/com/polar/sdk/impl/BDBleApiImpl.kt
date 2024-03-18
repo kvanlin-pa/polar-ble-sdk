@@ -466,7 +466,7 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
             } else {
                 log("listener search...")
                 listener?.let {
-                    connectSubscriptions[identifier] = it.search(false)
+                    connectSubscriptions[identifier] = it.search(true)
                         .filter { bleDeviceSession: BleDeviceSession -> if (identifier.contains(":")) bleDeviceSession.address == identifier else bleDeviceSession.polarDeviceId == identifier }
                         .take(1)
                         .observeOn(Schedulers.io())
