@@ -97,9 +97,6 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
     private var logger: PolarBleApiLogger? = null
 
     init {
-
-        android.util.Log("PolarAPI", "init")
-
         val clients: MutableSet<Class<out BleGattBase>> = mutableSetOf()
         for (feature in features) {
             when (feature) {
