@@ -98,9 +98,6 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
     private var logger: PolarBleApiLogger? = null
 
     init {
-
-        Log.d("MyTag", "This is a debug message (init)")
-
         val clients: MutableSet<Class<out BleGattBase>> = mutableSetOf()
         for (feature in features) {
             when (feature) {
@@ -1737,13 +1734,13 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
     }
 
     private fun log(message: String) {
-        BleLogger.e(TAG, "" + message)
-        logger?.message("" + message)
+        //BleLogger.e(TAG, "" + message)
+        logger.message("" + message)
     }
 
     private fun logError(message: String) {
-        BleLogger.e(TAG, "Error: $message")
-        logger?.message("Error: $message")
+        //BleLogger.e(TAG, "Error: $message")
+        logger.message("Error: $message")
     }
 
     companion object {
