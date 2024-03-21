@@ -130,9 +130,6 @@ public class BDDeviceListenerImpl extends BleDeviceListener {
         return Flowable.create((FlowableOnSubscribe<BleDeviceSession>) subscriber -> {
                             BleLogger.d(TAG, "search subscriber -> ");
 
-                            // PA edit - force true
-                            fetchKnownDevices = true;
-
                             if (fetchKnownDevices) {
                                 List<BluetoothDevice> devices =
                                         btManager.getDevicesMatchingConnectionStates(BluetoothProfile.GATT,
