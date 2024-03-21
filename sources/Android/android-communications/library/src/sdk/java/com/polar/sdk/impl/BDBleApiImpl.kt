@@ -862,7 +862,7 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
     override fun startListenForPolarHrBroadcasts(deviceIds: Set<String>?): Flowable<PolarHrBroadcastData> {
         listener?.let {
             BleLogger.d(TAG, "Start Hr broadcast listener. Filtering: ${deviceIds != null}")
-            return it.search(false)
+            return it.search(true)
                 .filter { bleDeviceSession: BleDeviceSession ->
                     (deviceIds == null || deviceIds.contains(bleDeviceSession.polarDeviceId)) &&
                             bleDeviceSession.advertisementContent.polarHrAdvertisement.isPresent &&
