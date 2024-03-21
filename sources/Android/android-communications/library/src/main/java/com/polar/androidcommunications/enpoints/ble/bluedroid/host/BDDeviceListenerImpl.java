@@ -134,12 +134,15 @@ public class BDDeviceListenerImpl extends BleDeviceListener {
                             BleLogger.d(TAG, "search subscriber -> ");
 
                             if (fetchKnownDevices) {
-                                //List<BluetoothDevice> devices =
-                                //        btManager.getDevicesMatchingConnectionStates(BluetoothProfile.GATT,
-                                //                new int[]{BluetoothProfile.STATE_CONNECTED | BluetoothProfile.STATE_CONNECTING});
+
+                                BleLogger.d(TAG, "search subscriber fetch known devices");
+
+                                List<BluetoothDevice> devices =
+                                        btManager.getDevicesMatchingConnectionStates(BluetoothProfile.GATT,
+                                                new int[]{BluetoothProfile.STATE_CONNECTED | BluetoothProfile.STATE_CONNECTING});
 
                                 // PA edit - use the bonded devices because the scan functionality doesn't work yet
-                                List<BluetoothDevice> devices = new ArrayList<>();
+                                //List<BluetoothDevice> devices = new ArrayList<>();
                                 //BluetoothAdapter btAdapter = btManager.getAdapter();
                                 //devices.addAll(btAdapter.getBondedDevices());
 
