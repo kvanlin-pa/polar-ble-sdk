@@ -413,7 +413,7 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
                     emitter.tryOnError(PolarInvalidArgument("Invalid service string format"))
                 }
             }.andThen(
-                it.search(false)
+                it.search(true)
                     .filter { bleDeviceSession: BleDeviceSession ->
                         if (bleDeviceSession.medianRssi >= rssiLimit && bleDeviceSession.isConnectableAdvertisement
                             && (polarDeviceType == null || polarDeviceType == bleDeviceSession.polarDeviceType)
@@ -844,7 +844,7 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
 
     override fun searchForDevice(): Flowable<PolarDeviceInfo> {
         listener?.let {
-            return it.search(false)
+            return it.search(true)
                 .distinct()
                 .map { bleDeviceSession: BleDeviceSession ->
                     PolarDeviceInfo(
