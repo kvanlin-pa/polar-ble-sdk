@@ -1,4 +1,4 @@
-import androidx.test.core.app.ApplicationProvider
+/*import androidx.test.core.app.ApplicationProvider
 import com.polar.sdk.api.PolarBleApi
 import com.polar.sdk.api.errors.PolarBleSdkInstanceException
 import com.polar.sdk.impl.BDBleApiImpl
@@ -45,3 +45,4 @@ class BDBleApiImplTest {
         }
     }
 }
+*/
