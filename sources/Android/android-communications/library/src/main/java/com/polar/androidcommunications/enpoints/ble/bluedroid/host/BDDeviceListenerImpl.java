@@ -9,6 +9,7 @@ import static com.polar.androidcommunications.common.ble.AndroidBuildUtils.getMo
 import static com.polar.androidcommunications.enpoints.ble.bluedroid.host.connection.ConnectionHandler.MTU_SKIP_NEGOTIATION;
 import static com.polar.androidcommunications.enpoints.ble.bluedroid.host.connection.ConnectionHandler.POLAR_PREFERRED_MTU;
 
+import android.util.Log;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -125,7 +126,9 @@ public class BDDeviceListenerImpl extends BleDeviceListener {
     @NonNull
     @Override
     public Flowable<BleDeviceSession> search(final boolean fetchKnownDevices) {
+        Log.w("MyApp", "DeviceListenerImpl " + fetchKnownDevices + " > ");
         BleLogger.d(TAG, "Search (fetchKnownDevices: " + fetchKnownDevices + ")");
+
         final FlowableEmitter<BleDeviceSession>[] subscriber1 = new FlowableEmitter[1];
         return Flowable.create((FlowableOnSubscribe<BleDeviceSession>) subscriber -> {
                             BleLogger.d(TAG, "search subscriber -> ");
@@ -202,6 +205,7 @@ public class BDDeviceListenerImpl extends BleDeviceListener {
 
     @Override
     public BleDeviceSession sessionByAddress(String address) {
+        // TODO
         BDDeviceSessionImpl session = sessions.getSession(address);
         if (session == null) {
             session = new BDDeviceSessionImpl(context, bluetoothAdapter.getRemoteDevice(address), scanCallback, bondingManager, factory);

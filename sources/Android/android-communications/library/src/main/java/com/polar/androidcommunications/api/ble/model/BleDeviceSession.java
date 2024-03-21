@@ -1,5 +1,6 @@
 package com.polar.androidcommunications.api.ble.model;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 
 import androidx.annotation.NonNull;
@@ -234,7 +235,20 @@ public abstract class BleDeviceSession {
      * @return polar device id
      */
     public String getPolarDeviceId() {
-        return advertisementContent.getPolarDeviceId();
+
+        String polarDeviceId = advertisementContent.getPolarDeviceId();
+
+        if (polarDeviceId.isEmpty()) {
+            // check the name instead, bondede devices don't appear to have a device id?
+            BluetoothDevice btDevice = getBluetoothDevice();
+            @SuppressLint("MissingPermission") String btDeviceName = btDevice.getName();
+            if (btDeviceName.startsWith("Polar")) {
+                String[] parts = btDeviceName.split("\\s+"); // split on spaces
+                return parts[parts.length - 1];
+            }
+        }
+
+        return polarDeviceId;
     }
 
     /**
