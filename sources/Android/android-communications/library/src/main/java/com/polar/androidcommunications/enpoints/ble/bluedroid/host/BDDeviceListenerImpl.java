@@ -208,7 +208,6 @@ public class BDDeviceListenerImpl extends BleDeviceListener {
 
     @Override
     public BleDeviceSession sessionByAddress(String address) {
-        // TODO
         BDDeviceSessionImpl session = sessions.getSession(address);
         if (session == null) {
             session = new BDDeviceSessionImpl(context, bluetoothAdapter.getRemoteDevice(address), scanCallback, bondingManager, factory);

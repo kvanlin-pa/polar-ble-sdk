@@ -239,7 +239,8 @@ public abstract class BleDeviceSession {
         String polarDeviceId = advertisementContent.getPolarDeviceId();
 
         if (polarDeviceId.isEmpty()) {
-            // check the name instead, bondede devices don't appear to have a device id?
+            // check the name instead, bonded devices don't appear to have advertisement content
+            // and therefore we don't have an device id (e.g. Polar H10 CF9...)
             BluetoothDevice btDevice = getBluetoothDevice();
             @SuppressLint("MissingPermission") String btDeviceName = btDevice.getName();
             if (btDeviceName.startsWith("Polar")) {
