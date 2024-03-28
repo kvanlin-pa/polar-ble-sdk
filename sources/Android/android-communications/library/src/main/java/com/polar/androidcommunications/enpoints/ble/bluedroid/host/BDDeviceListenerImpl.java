@@ -126,32 +126,21 @@ public class BDDeviceListenerImpl extends BleDeviceListener {
     @NonNull
     @Override
     public Flowable<BleDeviceSession> search(final boolean fetchKnownDevices) {
-        Log.w("MyApp", "DeviceListenerImpl " + fetchKnownDevices + " > ");
-        BleLogger.d(TAG, "Search (fetchKnownDevices: " + fetchKnownDevices + ")");
-
         final FlowableEmitter<BleDeviceSession>[] subscriber1 = new FlowableEmitter[1];
         return Flowable.create((FlowableOnSubscribe<BleDeviceSession>) subscriber -> {
-                            BleLogger.d(TAG, "search subscriber -> ");
-
+                            
                             if (fetchKnownDevices) {
-
-                                BleLogger.d(TAG, "search subscriber fetch known devices");
 
                                 List<BluetoothDevice> devices =
                                         btManager.getDevicesMatchingConnectionStates(BluetoothProfile.GATT,
                                                 new int[]{BluetoothProfile.STATE_CONNECTED | BluetoothProfile.STATE_CONNECTING});
 
-                                BleLogger.d(TAG, "check available devices");
-
-                                // TODO checken of ik dit terug mag plaatsen
                                 for (BluetoothDevice device : devices) {
                                     if (device.getType() == BluetoothDevice.DEVICE_TYPE_LE && sessions.getSession(device) == null) {
                                         BDDeviceSessionImpl newDevice = new BDDeviceSessionImpl(context, device, scanCallback, bondingManager, factory);
                                         sessions.addSession(newDevice);
                                     }
                                 }
-
-                                BleLogger.d(TAG, "get bonded devices");
 
                                 Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
                                 for (BluetoothDevice device : bondedDevices) {

@@ -265,9 +265,6 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
 
     override fun setApiLogger(logger: PolarBleApiLogger) {
         this.logger = logger
-        log("api logger set")
-        if (this.logger == null)
-            throw Exception("null logger")
     }
 
     override fun setAutomaticReconnection(enable: Boolean) {
@@ -453,22 +450,16 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
 
     @Throws(PolarInvalidArgument::class)
     override fun connectToDevice(identifier: String) {
-        log("connectToDevice: ${identifier}")
         val session = fetchSession(identifier)
 
-        log("connectToDevice: ${session}")
-
         if (session == null || session.sessionState == DeviceSessionState.SESSION_CLOSED) {
-            log("session null or session state is closed")
             if (connectSubscriptions.containsKey(identifier)) {
                 connectSubscriptions[identifier]?.dispose()
                 connectSubscriptions.remove(identifier)
             }
             if (session != null) {
-                log("open session connection")
                 openConnection(session)
             } else {
-                log("listener search...")
                 listener?.let {
                     connectSubscriptions[identifier] = it.search(true)
                         .filter { bleDeviceSession: BleDeviceSession -> if (identifier.contains(":")) bleDeviceSession.address == identifier else bleDeviceSession.polarDeviceId == identifier }
@@ -480,9 +471,6 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
                             { log("connect search completed for $identifier") })
                 }
             }
-        }
-        else {
-            log("session state not closed")
         }
     }
 
@@ -961,7 +949,6 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
     }
 
     private fun openConnection(session: BleDeviceSession) {
-        log("openConnection: ${session}")
         listener?.let {
             if (devicesStateMonitorDisposable == null || devicesStateMonitorDisposable?.isDisposed == true) {
                 devicesStateMonitorDisposable = it.monitorDeviceSessionState().subscribe(deviceStateMonitorObserver)
@@ -1243,9 +1230,6 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
 
     @Throws(PolarInvalidArgument::class)
     fun fetchSession(identifier: String): BleDeviceSession? {
-
-        log("fetchSession id: $identifier")
-
         if (identifier.matches(Regex("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$"))) {
             return sessionByAddress(identifier)
         } else if (identifier.matches(Regex("([0-9a-fA-F]){6,8}"))) {
@@ -1255,44 +1239,35 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
     }
 
     private fun sessionByAddress(address: String): BleDeviceSession? {
-        log("sessionByAddress: $address")
         listener?.let {
             val sessions = it.deviceSessions()
             if (sessions != null) {
                 for (session in sessions) {
-                    log(" > sessionByAddress ${session.address} vs ${address}")
                     if (session.address == address) {
-                        log(" > > sessionByAddress return ${session}: ${session.address}")
                         return session
                     }
                 }
             }
         }
-        log(" = sessionByAddress null")
         return null
     }
 
     private fun sessionByDeviceId(deviceId: String): BleDeviceSession? {
-        log("sessionByDeviceId: $deviceId")
         listener?.let {
             val sessions = it.deviceSessions()
             if (sessions != null) {
                 for (session in sessions) {
-                    log(" > sessionByDeviceId ${session.advertisementContent.polarDeviceId} vs ${deviceId}")
                     if (session.advertisementContent.polarDeviceId == deviceId) {
-                        log(" > > sessionByDeviceId return ${session}: ${session.advertisementContent.polarDeviceId}")
                         return session
                     }
 
                     // PA edit
                     if (session.polarDeviceId == deviceId) {
-                        log(" > > sessionByDeviceId return ${session}: ${session.polarDeviceId}")
                         return session;
                     }
                 }
             }
         }
-        log(" = sessionByDeviceId null")
         return null
     }
 
@@ -1756,15 +1731,11 @@ class BDBleApiImpl private constructor(context: Context, features: Set<PolarBleS
     private fun log(message: String) {
         //BleLogger.e(TAG, "" + message)
         logger?.message("" + message)
-        if (logger == null)
-            Log.d(TAG, "No logger: " + message)
     }
 
     private fun logError(message: String) {
         //BleLogger.e(TAG, "Error: $message")
         logger?.message("Error: $message")
-        if (logger == null)
-            Log.e(TAG, "No logger: Error: " + message)
     }
 
     companion object {
